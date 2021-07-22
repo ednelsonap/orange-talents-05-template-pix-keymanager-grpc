@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "br.com.zup.ednelson";
+option java_outer_classname = "ChavePixService";
+option objc_class_prefix = "HLW";
+
+package br.com.zup.ednelson;
+
+service ChavePixService {
+  rpc cadastrar (ChaveRequest) returns (ChaveResponse) {}
+}
+
+enum TipoChave {
+  CPF = 0;
+  CELULAR = 1;
+  EMAIL = 2;
+  ALEATORIA = 3;
+}
+
+enum TipoConta {
+  CONTA_POUPANCA = 0;
+  CONTA_CORRENTE = 1;
+}
+
+message ChaveRequest {
+  string clienteId = 1;
+  TipoChave tipoChave = 2;
+  TipoConta tipoConta = 3;
+}
+
+message ChaveResponse {
+  string chavePixId = 1;
+}
