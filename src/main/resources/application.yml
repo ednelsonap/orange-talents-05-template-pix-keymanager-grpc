@@ -30,3 +30,7 @@ jpa:
       hibernate:
         hbm2ddl:
           auto: update
+
+itau:
+  contas:
+    url: 'http://localhost:9091'

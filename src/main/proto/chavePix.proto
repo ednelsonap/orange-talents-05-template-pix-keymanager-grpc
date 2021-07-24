@@ -27,7 +27,7 @@ enum TipoConta {
 
 message ChaveRequest {
   string clienteId = 1;
-  string valor = 2;
+  string chave = 2;
   TipoChave tipoChave = 3;
   TipoConta tipoConta = 4;
 }
