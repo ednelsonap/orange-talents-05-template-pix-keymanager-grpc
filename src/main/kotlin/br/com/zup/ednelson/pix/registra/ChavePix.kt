@@ -36,5 +36,5 @@ class ChavePix(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-    val pixId = UUID.randomUUID().toString()
+    val chavePixId = UUID.randomUUID().toString()
 }

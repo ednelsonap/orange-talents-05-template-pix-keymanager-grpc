@@ -34,4 +34,5 @@ message ChaveRequest {
 
 message ChaveResponse {
   string chavePixId = 1;
+  string clienteId = 2;
 }

@@ -25,11 +25,10 @@ class NovaChavePixGrpcEndpoint(
         val novaChave = request!!.toModel()
         val chaveCriada = service.registra(novaChave)
 
-        val response = ChaveResponse.newBuilder()
-            .setChavePixId(chaveCriada.pixId)
-            .build()
-
-        responseObserver?.onNext(response)
+        responseObserver?.onNext(ChaveResponse.newBuilder()
+            .setClienteId(chaveCriada.clienteId.toString())
+            .setChavePixId(chaveCriada.chavePixId)
+            .build())
         responseObserver?.onCompleted()
 
     }
