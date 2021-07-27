@@ -11,6 +11,10 @@ service ChavePixService {
   rpc cadastrar (ChaveRequest) returns (ChaveResponse) {}
 }
 
+service RemoveChavePixService {
+  rpc remove(RemoveChavePixRequest) returns (RemoveChavePixResponse) {}
+}
+
 enum TipoChave {
   TIPO_CHAVE_DESCONHECIDO = 0;
   CPF = 1;
@@ -35,4 +39,14 @@ message ChaveRequest {
 message ChaveResponse {
   string chavePixId = 1;
   string clienteId = 2;
+}
+
+message RemoveChavePixRequest {
+  string clienteId = 1;
+  string chavePixId = 2;
+}
+
+message RemoveChavePixResponse {
+  string clienteId = 1;
+  string chavePixId = 2;
 }
