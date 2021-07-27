@@ -27,7 +27,7 @@ class NovaChavePixGrpcEndpoint(
 
         responseObserver?.onNext(ChaveResponse.newBuilder()
             .setClienteId(chaveCriada.clienteId.toString())
-            .setChavePixId(chaveCriada.chavePixId)
+            .setChavePixId(chaveCriada.chavePixId.toString())
             .build())
         responseObserver?.onCompleted()
 

@@ -12,6 +12,7 @@ class ChavePix(
 
     @field:NotNull
     @Column(nullable = false)
+    @Lob
     val clienteId: UUID?,
 
     @field:NotBlank
@@ -36,5 +37,6 @@ class ChavePix(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-    val chavePixId = UUID.randomUUID().toString()
+    @Lob
+    val chavePixId = UUID.randomUUID()
 }

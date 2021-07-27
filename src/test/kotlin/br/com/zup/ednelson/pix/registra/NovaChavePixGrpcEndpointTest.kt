@@ -12,15 +12,12 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.http.HttpResponse
-import io.micronaut.http.client.HttpClient
-import io.micronaut.http.client.annotation.Client
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.*
 import java.util.*
@@ -75,7 +72,7 @@ internal class NovaChavePixGrpcEndpointTest(
         with(response) {
             assertNotNull(chavePixId)
             assertEquals(CLIENTE_ID.toString(), clienteId)
-            assertTrue(repository.existsByChavePixId(chavePixId)) // efeito colateral
+            assertTrue(repository.existsByChavePixId(UUID.fromString(chavePixId))) // efeito colateral
         }
 
     }

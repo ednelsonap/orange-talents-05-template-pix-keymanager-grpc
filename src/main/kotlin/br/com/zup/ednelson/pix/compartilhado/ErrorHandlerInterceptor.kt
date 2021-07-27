@@ -1,17 +1,15 @@
 package br.com.zup.ednelson.pix.compartilhado
 
 import br.com.zup.ednelson.pix.registra.exception.ChavePixExistenteException
+import br.com.zup.ednelson.pix.registra.exception.ClienteNaoEncontradoNoItauException
 import br.com.zup.ednelson.pix.registra.exception.TipoDeChaveDesconhecidoException
 import br.com.zup.ednelson.pix.registra.exception.TipoDeContaDesconhecidoException
-import br.com.zup.ednelson.pix.registra.exception.ClienteNaoEncontradoNoItauException
 import br.com.zup.ednelson.pix.remove.exception.ChaveNaoEncontradaException
-import br.com.zup.ednelson.pix.remove.exception.DonoDaChaveDiferenteException
 import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import io.micronaut.aop.InterceptorBean
 import io.micronaut.aop.MethodInterceptor
 import io.micronaut.aop.MethodInvocationContext
-import java.lang.IllegalArgumentException
 import javax.inject.Singleton
 import javax.validation.ConstraintViolationException
 
@@ -51,10 +49,6 @@ class ErrorHandlerInterceptor : MethodInterceptor<Any, Any> {
                 is ChaveNaoEncontradaException -> Status.NOT_FOUND
                     .withCause(e)
                     .withDescription(e.message)
-
-                is DonoDaChaveDiferenteException -> Status.FAILED_PRECONDITION
-                    .withCause(e)
-                    .withDescription("Dono da chave diferente do informado")
 
                 else -> Status.UNKNOWN
                     .withCause(e)
