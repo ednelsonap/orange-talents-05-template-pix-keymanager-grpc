@@ -17,7 +17,7 @@ class ChavePix(
 
     @field:NotBlank
     @Column(unique = true, nullable = false)
-    val chave: String?,
+    var chave: String?,
 
     @field:NotNull
     @Column(nullable = false)
@@ -34,6 +34,8 @@ class ChavePix(
     val conta: ContaAssociada
 
 ){
+    val tipoPessoa = TipoPessoa.NATURAL_PERSON
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null

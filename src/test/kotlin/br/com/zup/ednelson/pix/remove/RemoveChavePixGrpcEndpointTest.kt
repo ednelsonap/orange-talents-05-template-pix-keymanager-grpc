@@ -14,6 +14,7 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.BeforeEach
@@ -27,47 +28,73 @@ internal class RemoveChavePixGrpcEndpointTest(
     val repository: ChavePixRepository,
     val grpcClient: RemoveChavePixServiceGrpc.RemoveChavePixServiceBlockingStub,
 ) {
+
+    lateinit var chaveExistente: ChavePix
+
     @BeforeEach
     fun setup() {
-        repository.deleteAll()
-    }
-
-    @Test
-    fun `deve remover uma chave pix existente`() {
-        //cenário
-        val existente = repository.save(ChavePix(
-            clienteId = UUID.fromString("c56dfef4-7901-44fb-84e2-a2cefb157890"),
+        chaveExistente = repository.save(ChavePix(
+            clienteId = UUID.randomUUID(),
             chave = "02467781054",
             tipoChave = TipoChave.CPF,
             tipoConta = TipoConta.CONTA_CORRENTE,
             conta = ContaAssociada("", "", "", "", "")
         ))
+    }
 
-        //ação
-        val response = grpcClient.remove(RemoveChavePixRequest.newBuilder()
-            .setChavePixId(existente.chavePixId.toString())
-            .setClienteId(existente.clienteId.toString())
-            .build()
-        )
-
-        //validação
-        assertEquals(existente.chavePixId.toString(), response.chavePixId.toString())
+    @AfterEach
+    fun cleanUp() {
+        repository.deleteAll()
     }
 
     @Test
-    fun `deve retornar not found quando nao encontrar uma chave`(){
+    fun `deve remover uma chave pix existente`() {
+
+        val response = grpcClient.remove(RemoveChavePixRequest.newBuilder()
+            .setChavePixId(chaveExistente.chavePixId.toString())
+            .setClienteId(chaveExistente.clienteId.toString())
+            .build()
+        )
+
+        assertEquals(chaveExistente.chavePixId.toString(), response.chavePixId.toString())
+    }
+
+    @Test
+    fun `nao deve remover chave pix quando ela for inexistente`(){
+
+        val chavePixIdInexistente = UUID.randomUUID().toString()
 
         val error = assertThrows<StatusRuntimeException> {
             grpcClient.remove(RemoveChavePixRequest.newBuilder()
-                .setChavePixId("2229c646-d794-456c-8dfa-38e0e72a0b09")
-                .setClienteId("c56dfef4-7901-44fb-84e2-a2cefb157890")
+                .setChavePixId(chavePixIdInexistente)
+                .setClienteId(chaveExistente.clienteId.toString())
                 .build())
         }
 
         with(error) {
             assertEquals(Status.NOT_FOUND.code, status.code)
+            assertEquals("Chave pix não encontrada ou não pertence ao cliente", status.description)
         }
-        assertFalse(repository.count() > 0) // efeito colareral
+        assertFalse(repository.count() > 1)
+    }
+
+    @Test
+    fun `nao deve remover chave pix quando ela existe mas pertence a outro cliente`(){
+
+        val outroClienteId = UUID.randomUUID().toString()
+
+        val error = assertThrows<StatusRuntimeException> {
+            grpcClient.remove(RemoveChavePixRequest.newBuilder()
+                .setChavePixId(chaveExistente.chavePixId.toString())
+                .setClienteId(outroClienteId)
+                .build())
+        }
+
+        with(error) {
+            assertEquals(Status.NOT_FOUND.code, status.code)
+            assertEquals("Chave pix não encontrada ou não pertence ao cliente", status.description)
+        }
+        assertFalse(repository.count() > 1)
     }
 
     @Test

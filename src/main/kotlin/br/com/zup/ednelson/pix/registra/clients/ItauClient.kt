@@ -2,6 +2,7 @@ package br.com.zup.ednelson.pix.registra.clients
 
 import br.com.zup.ednelson.pix.registra.DadosDaContaResponse
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.annotation.Delete
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.PathVariable
 import io.micronaut.http.annotation.QueryValue
