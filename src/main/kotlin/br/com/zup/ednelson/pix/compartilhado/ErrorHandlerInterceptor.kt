@@ -50,6 +50,10 @@ class ErrorHandlerInterceptor : MethodInterceptor<Any, Any> {
                     .withCause(e)
                     .withDescription(e.message)
 
+                is IllegalStateException -> Status.FAILED_PRECONDITION
+                    .withCause(e)
+                    .withDescription(e.message)
+
                 else -> Status.UNKNOWN
                     .withCause(e)
                     .withDescription("Erro inesperado")

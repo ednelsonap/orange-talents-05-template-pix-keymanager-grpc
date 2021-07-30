@@ -25,16 +25,16 @@ class NovaChavePixService(
     @Transactional
     fun registra(@Valid novaChave: NovaChavePixDto): ChavePix {
 
-        // Verifica de a chave já existe no sistema
+        // 1 - Verifica de a chave já existe no sistema
         if (chavePixRepository.existsByChave(novaChave.chave)) {
             throw ChavePixExistenteException()
         }
 
-        // 1 - Busca dados da conta no ERP do Itaú
+        // 2 - Busca dados da conta no ERP do Itaú
         val response = itauClient.buscaContaPorIdClienteETipo(novaChave.clienteId!!, novaChave.tipoConta!!.name)
         val conta = response.body()?.toModel() ?: throw ClienteNaoEncontradoNoItauException()
 
-        // 2 - Grava no banco
+        // 3 - Grava no banco
         val chave = novaChave.toModel(conta)
         chavePixRepository.save(chave).also {
             logger.info("Chave gravada no banco de dados local")
@@ -44,7 +44,7 @@ class NovaChavePixService(
             logger.info("Chave gerada local: ${chave.chave}")
         }
 
-        // 3 - Grava no bcb
+        // 4 - Grava no bcb
         val bankAccount = BankAccount(
             participant = chave.conta.ispb,
             branch = chave.conta.agencia,
@@ -70,7 +70,7 @@ class NovaChavePixService(
                     chave.tipoChave.name
                 }
             },
-            key = chave.chave,
+            key = chave.chave!!,
             bankAccount = bankAccount,
             owner = owner
         )
@@ -79,7 +79,7 @@ class NovaChavePixService(
             logger.info("Chave cadastrada no Banco Central do Brasil")
         }
 
-        // 4 - Atualiza a chave, quando o tipo for aleatória, com a chave gerada pelo BCB
+        // 5 - Atualiza a chave, quando o tipo for aleatória, com a chave gerada pelo BCB
         chave.chave = bcbResponse.body().key
         chavePixRepository.update(chave)
 

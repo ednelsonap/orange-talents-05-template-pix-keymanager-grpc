@@ -13,7 +13,7 @@ class ChavePix(
     @field:NotNull
     @Column(nullable = false)
     @Lob
-    val clienteId: UUID?,
+    val clienteId: UUID,
 
     @field:NotBlank
     @Column(unique = true, nullable = false)
