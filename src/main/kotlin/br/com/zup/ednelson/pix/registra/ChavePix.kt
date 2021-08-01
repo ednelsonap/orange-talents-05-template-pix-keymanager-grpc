@@ -1,6 +1,8 @@
 package br.com.zup.ednelson.pix.registra
 
 import br.com.zup.ednelson.TipoConta
+import br.com.zup.ednelson.pix.consulta.exception.ChavePixNaoPertenceAoClienteException
+import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
 import javax.validation.Valid
@@ -34,6 +36,14 @@ class ChavePix(
     val conta: ContaAssociada
 
 ){
+    fun pertenceAo(clienteIdAsUuid: UUID?): Boolean {
+        if(this.clienteId == clienteIdAsUuid) {
+            return true
+        } else {
+            throw ChavePixNaoPertenceAoClienteException()
+        }
+    }
+
     val tipoPessoa = TipoPessoa.NATURAL_PERSON
 
     @Id
@@ -41,4 +51,5 @@ class ChavePix(
     var id: Long? = null
     @Lob
     val chavePixId = UUID.randomUUID()
+    val criadaEm: LocalDateTime = LocalDateTime.now()
 }

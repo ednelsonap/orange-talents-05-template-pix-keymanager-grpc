@@ -1,5 +1,6 @@
 package br.com.zup.ednelson.pix.compartilhado
 
+import br.com.zup.ednelson.pix.consulta.exception.ChavePixNaoPertenceAoClienteException
 import br.com.zup.ednelson.pix.registra.exception.ChavePixExistenteException
 import br.com.zup.ednelson.pix.registra.exception.ClienteNaoEncontradoNoItauException
 import br.com.zup.ednelson.pix.registra.exception.TipoDeChaveDesconhecidoException
@@ -51,6 +52,14 @@ class ErrorHandlerInterceptor : MethodInterceptor<Any, Any> {
                     .withDescription(e.message)
 
                 is IllegalStateException -> Status.FAILED_PRECONDITION
+                    .withCause(e)
+                    .withDescription(e.message)
+
+                is ChavePixNaoPertenceAoClienteException -> Status.FAILED_PRECONDITION
+                    .withCause(e)
+                    .withDescription(e.message)
+
+                is IllegalArgumentException -> Status.INVALID_ARGUMENT
                     .withCause(e)
                     .withDescription(e.message)
 

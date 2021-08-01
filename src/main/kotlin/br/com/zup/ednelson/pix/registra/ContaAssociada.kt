@@ -10,6 +10,6 @@ class ContaAssociada(
     val cpfDoTitular: String,
     val agencia: String,
     val numeroDaConta: String
-) {
+)
 
-}
+
