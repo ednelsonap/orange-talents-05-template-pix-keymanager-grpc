@@ -2,7 +2,6 @@ package br.com.zup.ednelson.pix.lista
 
 import br.com.zup.ednelson.*
 import br.com.zup.ednelson.pix.compartilhado.ErrorHandler
-import br.com.zup.ednelson.pix.consulta.ConsultaChavePixResponseConversor
 import br.com.zup.ednelson.pix.registra.ChavePixRepository
 import com.google.protobuf.Timestamp
 import io.grpc.stub.StreamObserver
@@ -13,7 +12,7 @@ import javax.inject.Singleton
 
 @ErrorHandler
 @Singleton
-class ListaChavesPixEndpoint(@Inject val repository: ChavePixRepository)
+class ListaChavesPixEndpoint(@Inject private val repository: ChavePixRepository)
     : ListaChavePixServiceGrpc.ListaChavePixServiceImplBase() {
 
     override fun lista(
