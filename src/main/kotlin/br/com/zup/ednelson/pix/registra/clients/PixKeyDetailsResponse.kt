@@ -19,13 +19,13 @@ data class PixKeyDetailsResponse(
             tipoConta = when (this.bankAccount.accountType) {
                 "CACC" -> TipoConta.CONTA_CORRENTE.name
                 "SVGS" -> TipoConta.CONTA_POUPANCA.name
-                else -> throw  IllegalStateException("Algo inesperável ocorreu")
+                else -> throw  IllegalStateException("Tipo de conta desconhecido")
             },
             conta = ContaAssociada(
                 instituicao = if (bankAccount.participant == "60701190") {
                     "ITAÚ UNIBANCO S.A."
                 } else {
-                    throw  IllegalStateException("Algo inesperável ocorreu")
+                    throw  IllegalStateException("Instituição desconhecida")
                 },
                 ispb = bankAccount.participant,
                 nomeDoTitular = owner.name,

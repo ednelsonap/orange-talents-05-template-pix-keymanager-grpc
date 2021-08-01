@@ -10,7 +10,7 @@ import javax.validation.constraints.Size
 @ValidPixKey
 @Introspected
 data class NovaChavePixDto(
-    @field:NotBlank val clienteId: String?,
+    @field:NotBlank @field:ValidUUID val clienteId: String?,
     @field:Size(max = 77) val chave: String?,
     @field:NotNull val tipoChave: TipoChave?,
     @field:NotNull val tipoConta: TipoConta?
