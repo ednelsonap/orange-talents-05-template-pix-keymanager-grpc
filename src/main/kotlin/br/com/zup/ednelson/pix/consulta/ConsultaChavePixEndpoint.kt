@@ -23,13 +23,13 @@ class ConsultaChavePixEndpoint(
 
     override fun consulta(
         request: ConsultaChavePixRequest,
-        responseObserver: StreamObserver<ConsultaChavePixResponse>?
+        responseObserver: StreamObserver<ConsultaChavePixResponse>
     ) {
         val filtro = request.toModel(validator)
         val chaveInfo = filtro.filtra(repository = repository, bcbClient = bcbClient)
 
-        responseObserver?.onNext(ConsultaChavePixResponseConversor().converte(chaveInfo))
-        responseObserver?.onCompleted()
+        responseObserver.onNext(ConsultaChavePixResponseConversor().converte(chaveInfo))
+        responseObserver.onCompleted()
     }
 }
 
